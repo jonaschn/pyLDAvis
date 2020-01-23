@@ -45,7 +45,9 @@ def _extract_data(topic_model, corpus, dictionary, doc_topic_dists=None):
     if doc_topic_dists is None:
         # If its an HDP model.
         if hasattr(topic_model, 'lda_beta'):
-            gamma = topic_model.inference(corpus)
+            #gamma = topic_model.inference(corpus)
+            doc2author = atmodel.construct_doc2author(topic_model.corpus, topic_model.author2doc)
+            gamma, _ = topic_model.inference(topic_model.corpus, topic_model.author2doc, doc2author, 0)
         else:
             gamma, _ = topic_model.inference(corpus)
         doc_topic_dists = gamma / gamma.sum(axis=1)[:, None]
